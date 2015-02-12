@@ -1,4 +1,5 @@
 import requests
+from lxml import etree
 from bs4 import BeautifulSoup
 import sys
 import json
@@ -37,15 +38,16 @@ def addURLs(symbol): #add the fetched urls to the dictionary of symbol -> urls
 def fetchURLs(symbol): #the hard part - given a symbol, scrape Yahoo! finance headlines page and return all the URLs for that symbol
     try:
         urls = []
-        yahoo = "http://finance.yahoo.com/q?s=" + symbol.lower()
-        soup = BeautifulSoup(requests.get(yahoo, headers=HEADERS).content, "lxml")
-        headlines = soup.find(id="yfi_headlines").find_all("div")[1].find("ul").find_all("li")
-        for headline in headlines:
-            text = headline.text
-            time = text[text.index("(")+1:text.index(")")]
-            title = text[:text.index("(")]
-            print "found article: " + title
-            url = headline.a.attrs['href']
+        feed = "http://feeds.finance.yahoo.com/rss/2.0/headline?s=" + symbol.lower() + "&region=US&lang=en-US"
+        rss = requests.get(feed, headers=HEADERS).content
+        soup = BeautifulSoup(rss, "lxml")
+        headlines = soup.findAll("item")
+        for headline in [headline.contents for headline in headlines]:
+            description = headline[3].text
+            time = headline[5].text
+            title = headline[0].text
+            print "found article: " + title + " - " + time + " - "+ description
+            url = headline[2]
             urls.append(Headline(url, title, time))
         return urls
     except:
