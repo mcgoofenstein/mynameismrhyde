@@ -5,10 +5,9 @@ import sys
 import json
 import time
 
-HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0', 'From': 'mdgough12@gmail.com'}
+HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0', 'From': 'mdgough@indiana.edu'}
 inputFilePath = sys.argv[1]
 outputFilePath = sys.argv[2]
-outputURLs = {} #dictionary of symbol->urls
 rssFileName = "/".join(inputFilePath.split("/")[0:-1]) + "/rssCache_"
 
 
@@ -20,6 +19,10 @@ class Headline:
         self.price = price
     def addSymbol(self, symbol):
         self.symbol = symbol
+
+def onlyNewURLs(fetched, existing):
+    return list(set(fetched) - set(existing))
+
 
 def new(rss, file): #returns True if the given rss is newer than the rssCache file
     r = {}
@@ -55,10 +58,17 @@ def save(rss, file): #saves the given rss into the given rssCache file
     file.close()
 
 def getPrice(symbol):
-    api = "http://dev.markitondemand.com/Api/v2/Quote/json?symbol=" + symbol
-    apiReturn = json.loads(requests.get(api, headers=HEADERS).content)
-    price = apiReturn["LastPrice"]
-    return price
+    print "fetching price for " + symbol + "..."
+    try:
+        api = "http://dev.markitondemand.com/Api/v2/Quote/json?symbol=" + symbol
+        apiReturn = json.loads(requests.get(api, headers=HEADERS).content)
+        price = apiReturn["LastPrice"]
+        print "price found: " + str(price)
+        return str(price)
+    except:
+        print "error finding price... re-trying"
+        time.sleep(3)
+        return getPrice(symbol)
 
 def readSymbols(inputFilePath): #read the input file
     print "reading input file at: " + inputFilePath
@@ -72,16 +82,17 @@ def addURLs(symbol): #add the fetched urls to the dictionary of symbol -> urls
         print "skipping invalid symbol: " + symbol
         return
     print "finding URLs for " + symbol
-    if outputURLs.has_key(symbol):
-        urls = outputURLs[symbol]
-    else:
+    if not outputURLs.has_key(symbol): #initialize symbol -> url entry if it doesn't exist
         urls = []
+        outputURLs[symbol] = urls
     fetchedURLs = fetchURLs(symbol)
     if fetchedURLs:
+        fetchedURLs += onlyNewURLs(fetchedURLs, outputURLs[symbol])
         outputURLs[symbol] = fetchedURLs
 
 def fetchURLs(symbol): #given a symbol, scrape yahoo rss news feed
     open(rssFileName+symbol+".xml", "a").close()
+    price = getPrice(symbol)
     try:
         rssCache = open(rssFileName+symbol+".xml", 'r')
         urls = []
@@ -91,7 +102,6 @@ def fetchURLs(symbol): #given a symbol, scrape yahoo rss news feed
         if newFeed["isNew"]: #if the rss has new things, save it to disk and then add the new things to the url download list
             save(rss, rssCache)
             for headline in [item.contents for item in newFeed["new"]]: #for every new url in the newsFeed
-                price = getPrice(symbol)
                 description = headline[3].text
                 time = headline[5].text
                 title = headline[0].text
@@ -105,8 +115,6 @@ def fetchURLs(symbol): #given a symbol, scrape yahoo rss news feed
             return []
     except:
         print "ERROR :-( no urls found for: " + symbol
-        for url in urls:
-            print url.title
         return []
 
 def writeJSON(symbol, headlines):
@@ -131,13 +139,17 @@ def printCsv(symbol, headlines, file): #print a SYMBOL, url... to the file argum
 def writeToOutput(file): #call the printCsv function to write each dictionary entry to the output file
     for symbol in outputURLs:
         printCsv(symbol, outputURLs[symbol], file)
+    print "output written to: " + outputFilePath
 
-symbols = readSymbols(inputFilePath)
-for symbolLine in symbols:
-    for symbol in symbolLine:
-        print "parsed symbol: " + symbol
-        addURLs(symbol)
-outputFile = open(outputFilePath, 'w')
-writeToOutput(outputFile)
-print "output written to: " + outputFilePath
-outputFile.close()
+while(True):
+    outputURLs = {} #dictionary of symbol->urls
+    symbols = readSymbols(inputFilePath)
+    for symbolLine in symbols:
+        for symbol in symbolLine:
+            print "parsed symbol: " + symbol
+            addURLs(symbol)
+    outputFile = open(outputFilePath, 'a')
+    writeToOutput(outputFile)
+    outputFile.close()
+    time.sleep(60)
+
