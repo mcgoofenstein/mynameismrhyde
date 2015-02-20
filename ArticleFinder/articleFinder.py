@@ -24,7 +24,7 @@ def onlyNewURLs(fetched, existing):
     return list(set(fetched) - set(existing))
 
 
-def new(rss, file): #returns True if the given rss is newer than the rssCache file
+def markNewRss(rss, file): #returns a dictionary object which has keys to lists of all old and new rss items
     r = {}
     newItemsList = []
     oldRss = file.readlines()
@@ -37,8 +37,9 @@ def new(rss, file): #returns True if the given rss is newer than the rssCache fi
     for newItem in newItems:
         itemIsNew = True
         newDate = newItem.find("pubdate").text
+        newLink = newItem.find("link").text
         for oldItem in oldItems:
-            if oldItem.find("pubdate").text == newDate:
+            if oldItem.find("pubdate").text == newDate or oldItem.find("link").text == newLink:
                 itemIsNew = False
         if itemIsNew:
             newItemsList.append(newItem)
@@ -85,12 +86,12 @@ def addURLs(symbol): #add the fetched urls to the dictionary of symbol -> urls
     if not outputURLs.has_key(symbol): #initialize symbol -> url entry if it doesn't exist
         urls = []
         outputURLs[symbol] = urls
-    fetchedURLs = fetchURLs(symbol)
+    fetchedURLs = fetchURLs(symbol) #returns a list of the newest Headlines
     if fetchedURLs:
-        fetchedURLs += onlyNewURLs(fetchedURLs, outputURLs[symbol])
+        #fetchedURLs += onlyNewURLs(fetchedURLs, outputURLs[symbol]) why would there be redundancies? i think this adds duplicates
         outputURLs[symbol] = fetchedURLs
 
-def fetchURLs(symbol): #given a symbol, scrape yahoo rss news feed
+def fetchURLs(symbol): #given a symbol, scrape yahoo rss news feed. return list of new Headlines found WRT RSS cache file
     open(rssFileName+symbol+".xml", "a").close()
     price = getPrice(symbol)
     try:
@@ -98,7 +99,7 @@ def fetchURLs(symbol): #given a symbol, scrape yahoo rss news feed
         urls = []
         feed = "http://feeds.finance.yahoo.com/rss/2.0/headline?s=" + symbol.lower() + "&region=US&lang=en-US"
         rss = requests.get(feed, headers=HEADERS).content
-        newFeed = new(rss, rssCache) #check to see if this rss feed has anything new
+        newFeed = markNewRss(rss, rssCache) #check to see if this rss feed has anything new
         if newFeed["isNew"]: #if the rss has new things, save it to disk and then add the new things to the url download list
             save(rss, rssCache)
             for headline in [item.contents for item in newFeed["new"]]: #for every new url in the newsFeed
@@ -142,14 +143,15 @@ def writeToOutput(file): #call the printCsv function to write each dictionary en
     print "output written to: " + outputFilePath
 
 while(True):
-    outputURLs = {} #dictionary of symbol->urls
+    outputURLs = {} #dictionary of symbol->url
+
     symbols = readSymbols(inputFilePath)
     for symbolLine in symbols:
         for symbol in symbolLine:
             print "parsed symbol: " + symbol
-            addURLs(symbol)
+            addURLs(symbol) #populates the outputURLs dictionary and the priceQueue
     outputFile = open(outputFilePath, 'a')
-    writeToOutput(outputFile)
+    writeToOutput(outputFile) #writes the outputURLs dictionary to the output file
     outputFile.close()
     time.sleep(60)
 
