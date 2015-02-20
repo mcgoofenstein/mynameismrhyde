@@ -38,9 +38,9 @@ def markNewRss(rss, file): #returns a dictionary object which has keys to lists 
     for newItem in newItems:
         itemIsNew = True
         newDate = newItem.find("pubdate").text
-        newLink = newItem.find("link").text
+        newLink = newItem.contents[2]
         for oldItem in oldItems:
-            if oldItem.find("pubdate").text == newDate or oldItem.find("link").text == newLink:
+            if oldItem.find("pubdate").text == newDate or oldItem.contents[2] == newLink:
                 itemIsNew = False
         if itemIsNew:
             newItemsList.append(newItem)
@@ -127,6 +127,7 @@ def fetchURLs(symbol): #given a symbol, scrape yahoo rss news feed. return list 
         print "ERROR :-( no urls found for: " + symbol
         return []
 
+
 def writeJSON(symbol, headlines):
     outputString = ""
     for headline in headlines:
@@ -134,7 +135,6 @@ def writeJSON(symbol, headlines):
         output = json.dumps(headline.__dict__) + "\n"
         outputString += output
     return outputString
-
 
 
 def printCsv(symbol, headlines, file): #print a SYMBOL, url... to the file argument
@@ -153,7 +153,6 @@ def writeToOutput(file): #call the printCsv function to write each dictionary en
 
 while(True):
     outputURLs = {} #dictionary of symbol->url
-
     symbols = readSymbols(inputFilePath)
     for symbolLine in symbols:
         for symbol in symbolLine:
