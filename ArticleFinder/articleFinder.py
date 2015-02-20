@@ -3,6 +3,7 @@ from lxml import etree
 from bs4 import BeautifulSoup
 import sys
 import json
+import datetime
 import time
 
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0', 'From': 'mdgough@indiana.edu'}
@@ -23,6 +24,41 @@ class Headline:
 
 def onlyNewURLs(fetched, existing):
     return list(set(fetched) - set(existing))
+
+
+def convertToEST(time):
+    #Fri, 20 Feb 2015 19:26:45 GMT -> Fri Feb 20 14:26:45 UTC-05:00 2015
+    hour = str(int(time.split(":")[0].split(" ")[-1]) - 5).zfill(2)
+    min = time.split(":")[1]
+    sec = time.split(":")[2].split(" ")[0]
+    hms = ":".join([hour,min,sec])
+    year = time.split(" ")[3]
+    dm = " ".join(time.split(" ")[:2]).replace(",", "")
+    return dm + " " + hms + " UTC-05:00 " + year
+
+
+def waitSeconds(timeNow, openClose):
+    if openClose[0] == "o":
+        print "waiting 60 seconds before checking servers..."
+        return 60
+    else:
+        timeToWait = 9 + (24 - timeNow.hour) * 3600
+        print "I'll check again in " + timeToWait + " seconds..."
+        return timeToWait
+
+def marketOpen(): #returns true if the market is open and it has been more than a minute since the last time the script ran
+    timeNow = datetime.datetime.now()
+    day = datetime.datetime.now().weekday()
+    if day < 5 and (timeNow.hour < 17 or (timeNow.hour == 16 and timeNow.minute < 31)):
+        openClose = "open!"
+        rv = True
+    else:
+        openClose = "closed!"
+        rv = False
+    print "It's " + timeNow.strftime("%A, %B %d, %Y, at %H:%M:%S - The markets are ") + openClose
+    time.sleep(waitSeconds(timeNow, openClose))
+    return rv
+
 
 
 def markNewRss(rss, file): #returns a dictionary object which has keys to lists of all old and new rss items
@@ -113,7 +149,7 @@ def fetchURLs(symbol): #given a symbol, scrape yahoo rss news feed. return list 
             save(rss, rssCache)
             for headline in [item.contents for item in newFeed["new"]]: #for every new url in the newsFeed
                 description = headline[3].text
-                time = headline[5].text
+                time = convertToEST(headline[5].text)
                 title = headline[0].text
                 print "found article: " + title + " - " + time + " - "+ description
                 url = headline[2]
@@ -151,7 +187,9 @@ def writeToOutput(file): #call the printCsv function to write each dictionary en
         printCsv(symbol, outputURLs[symbol], file)
     print "output written to: " + outputFilePath
 
-while(True):
+
+
+while(marketOpen()):
     outputURLs = {} #dictionary of symbol->url
     symbols = readSymbols(inputFilePath)
     for symbolLine in symbols:
@@ -161,5 +199,4 @@ while(True):
     outputFile = open(outputFilePath, 'a')
     writeToOutput(outputFile) #writes the outputURLs dictionary to the output file
     outputFile.close()
-    time.sleep(60)
 
