@@ -9,6 +9,7 @@ HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 F
 inputFilePath = sys.argv[1]
 outputFilePath = sys.argv[2]
 rssFileName = "/".join(inputFilePath.split("/")[0:-1]) + "/rssCache_"
+priceFileName = "/".join(inputFilePath.split("/")[0:-1]) + "/prices_"
 
 
 class Headline:
@@ -64,10 +65,18 @@ def getPrice(symbol):
         api = "http://dev.markitondemand.com/Api/v2/Quote/json?symbol=" + symbol
         apiReturn = json.loads(requests.get(api, headers=HEADERS).content)
         price = apiReturn["LastPrice"]
-        print "price found: " + str(price)
+        changePct = apiReturn["ChangePercent"]
+        time = apiReturn["Timestamp"]
+        volume = apiReturn["Volume"]
+        changeYTD = apiReturn["ChangePercentYTD"]
+        high,low,openPrice = apiReturn["High"], apiReturn["Low"], apiReturn["Open"]
+        priceFile = open(priceFileName+symbol, "a")
+        priceFile.write(json.dumps({"LastPrice":price,"ChangePercent":changePct,"Timestamp":time,"Volume":volume,"ChangePercentYTD":changeYTD,"High":high,"Low":low,"Open":openPrice})+"\n")
+        priceFile.close()
+        print "price saved: " + str(price)
         return str(price)
     except:
-        print "error finding price... re-trying"
+        print "error saving price... re-trying"
         time.sleep(3)
         return getPrice(symbol)
 
