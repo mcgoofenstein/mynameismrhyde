@@ -43,7 +43,7 @@ def waitSeconds(timeNow, openClose):
         return 60
     else:
         timeToWait = 9 + (24 - timeNow.hour) * 3600
-        print "I'll check again in " + str(timeToWait) + " seconds..."
+        print "I'll check again in like " + str(timeToWait/3600) + " hours..."
         return timeToWait
 
 def marketOpen(): #returns true if the market is open and it has been more than a minute since the last time the script ran
