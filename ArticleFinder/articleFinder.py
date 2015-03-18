@@ -1,5 +1,5 @@
 import requests
-from lxml import etree
+#from lxml import etree
 from bs4 import BeautifulSoup
 import sys
 import json
@@ -25,28 +25,36 @@ class Headline:
 def onlyNewURLs(fetched, existing):
     return list(set(fetched) - set(existing))
 
+def getTime():
+    #TODO: daylight savings time detector...
+    timeNow = datetime.datetime.now()
+    day = datetime.datetime.now().weekday()
+    return timeNow.strftime("%a %d %b %H:%M:%S %Y ") + "UTC-4:00 2015" #Tue Mar 17 15:59:00 UTC-04:00 2015
 
 def convertToEST(time):
-    #Fri, 20 Feb 2015 19:26:45 GMT -> Fri Feb 20 14:26:45 UTC-05:00 2015
+    #Fri, 20 Feb 2015 19:26:45 GMT -> Fri Feb 20 14:26:45 UTC-04:00 2015
     hour = str(int(time.split(":")[0].split(" ")[-1]) - 5).zfill(2)
+    month = time.split(" ")[2]
+    day = time.split(" ")[1]
+    weekday = time.split(" ")[0][:-1]
     min = time.split(":")[1]
     sec = time.split(":")[2].split(" ")[0]
     hms = ":".join([hour,min,sec])
     year = time.split(" ")[3]
     dm = " ".join(time.split(" ")[:2]).replace(",", "")
-    return dm + " " + hms + " UTC-05:00 " + year
-
+    return weekday + " " + day + " " + month + " " + hms + " UTC-04:00 " + year
 
 def waitSeconds(timeNow, openClose):
     if openClose[0] == "o":
-        print "waiting 60 seconds before checking servers..."
+        print "waiting 60 seconds before checking servers again..."
         return 60
     else:
         timeToWait = 9 + (24 - timeNow.hour) * 3600
         print "I'll check again in like " + str(timeToWait/3600) + " hours..."
         return timeToWait
 
-def marketOpen(): #returns true if the market is open and it has been more than a minute since the last time the script ran
+def marketOpen(FIRST_TIME): #returns true if the market is open and it has been more than a minute since the last time the script ran
+    """this is the regulator/driver function"""
     timeNow = datetime.datetime.now()
     day = datetime.datetime.now().weekday()
     if day < 5 and (timeNow.hour < 17 or (timeNow.hour == 16 and timeNow.minute < 31)):
@@ -56,7 +64,8 @@ def marketOpen(): #returns true if the market is open and it has been more than 
         openClose = "closed!"
         rv = False
     print "It's " + timeNow.strftime("%A, %B %d, %Y, at %H:%M:%S - The markets are ") + openClose
-    time.sleep(waitSeconds(timeNow, openClose))
+    if not FIRST_TIME:
+        time.sleep(waitSeconds(timeNow, openClose))
     return rv
 
 
@@ -188,15 +197,18 @@ def writeToOutput(file): #call the printCsv function to write each dictionary en
     print "output written to: " + outputFilePath
 
 
-
-while(marketOpen()):
-    outputURLs = {} #dictionary of symbol->url
-    symbols = readSymbols(inputFilePath)
-    for symbolLine in symbols:
-        for symbol in symbolLine:
-            print "parsed symbol: " + symbol
-            addURLs(symbol) #populates the outputURLs dictionary and the priceQueue
-    outputFile = open(outputFilePath, 'a')
-    writeToOutput(outputFile) #writes the outputURLs dictionary to the output file
-    outputFile.close()
+FIRST_TIME = True #signifies the program is being started up, bypasses initial 60-sec wait
+while(True):
+    if marketOpen(FIRST_TIME):
+        print "Running Article Finder at " + getTime() + " on input directory " + inputFilePath + " and output saved to " + outputFilePath
+        outputURLs = {} #dictionary of symbol->url
+        symbols = readSymbols(inputFilePath)
+        for symbolLine in symbols:
+            for symbol in symbolLine:
+                print "parsed symbol: " + symbol
+                addURLs(symbol) #populates the outputURLs dictionary and the priceQueue
+        outputFile = open(outputFilePath, 'a')
+        writeToOutput(outputFile) #writes the outputURLs dictionary to the output file
+        outputFile.close()
+    FIRST_TIME = False
 
