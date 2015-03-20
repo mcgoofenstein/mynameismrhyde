@@ -11,6 +11,7 @@ inputFilePath = sys.argv[1]
 outputFilePath = sys.argv[2]
 rssFileName = "/".join(inputFilePath.split("/")[0:-1]) + "/rssCache_"
 priceFileName = "/".join(inputFilePath.split("/")[0:-1]) + "/prices_"
+logFile = open(outputFilePath + "finder.log", "a")
 
 
 class Headline:
@@ -47,10 +48,12 @@ def convertToEST(time):
 def waitSeconds(timeNow, openClose):
     if openClose[0] == "o":
         print "waiting 60 seconds before checking servers again..."
+        logFile.write("waiting 60 seconds before checking servers again...\n")
         return 60
     else:
         timeToWait = 9 + (24 - timeNow.hour) * 3600
         print "I'll check again in like " + str(timeToWait/3600) + " hours..."
+        logFile.write("I'll check again in like " + str(timeToWait/3600) + " hours...\n")
         return timeToWait
 
 def marketOpen(FIRST_TIME): #returns true if the market is open and it has been more than a minute since the last time the script ran
@@ -64,6 +67,7 @@ def marketOpen(FIRST_TIME): #returns true if the market is open and it has been 
         openClose = "closed!"
         rv = False
     print "It's " + timeNow.strftime("%A, %B %d, %Y, at %H:%M:%S - The markets are ") + openClose
+    logFile.write("It's " + timeNow.strftime("%A, %B %d, %Y, at %H:%M:%S - The markets are ") + openClose + "\n")
     if not FIRST_TIME:
         time.sleep(waitSeconds(timeNow, openClose))
     return rv
@@ -106,6 +110,7 @@ def save(rss, file): #saves the given rss into the given rssCache file
 
 def getPrice(symbol):
     print "fetching price for " + symbol + "..."
+    logFile.write("fetching price for " + symbol + "...\n")
     try:
         api = "http://dev.markitondemand.com/Api/v2/Quote/json?symbol=" + symbol
         apiReturn = json.loads(requests.get(api, headers=HEADERS).content)
@@ -119,14 +124,17 @@ def getPrice(symbol):
         priceFile.write(json.dumps({"LastPrice":price,"ChangePercent":changePct,"Timestamp":time,"Volume":volume,"ChangePercentYTD":changeYTD,"High":high,"Low":low,"Open":openPrice})+"\n")
         priceFile.close()
         print "price saved: " + str(price)
+        logFile.write("price saved: " + str(price) + "\n")
         return str(price)
     except:
         print "error saving price... re-trying"
+        logFile.write("error saving price... re-trying\n")
         time.sleep(3)
         return getPrice(symbol)
 
 def readSymbols(inputFilePath): #read the input file
     print "reading input file at: " + inputFilePath
+    logFile.write("reading input file at: " + inputFilePath + "\n")
     symbolsFile = open(inputFilePath, 'r')
     symbols = [line.strip().split(",") for line in symbolsFile.readlines()]
     symbolsFile.close()
@@ -135,8 +143,10 @@ def readSymbols(inputFilePath): #read the input file
 def addURLs(symbol): #add the fetched urls to the dictionary of symbol -> urls
     if len(symbol) < 1:
         print "skipping invalid symbol: " + symbol
+        logFile.write("skipping invalid symbol: " + symbol + "\n")
         return
     print "finding URLs for " + symbol
+    logFile.write("finding URLs for " + symbol + "\n")
     if not outputURLs.has_key(symbol): #initialize symbol -> url entry if it doesn't exist
         urls = []
         outputURLs[symbol] = urls
@@ -161,15 +171,18 @@ def fetchURLs(symbol): #given a symbol, scrape yahoo rss news feed. return list 
                 time = convertToEST(headline[5].text)
                 title = headline[0].text
                 print "found article: " + title + " - " + time + " - "+ description
+                logFile.write("found article: " + title + " - " + time + " - "+ description + "\n")
                 url = headline[2]
                 urls.append(Headline(url, title, time, price))
             if urls:
                 return urls
         else:
             print "no new articles found since last search"
+            logFile.write("no new articles found since last search\n")
             return []
     except:
         print "ERROR :-( no urls found for: " + symbol
+        logFile.write("ERROR :-( no urls found for: " + symbol + "\n")
         return []
 
 
@@ -187,6 +200,7 @@ def printCsv(symbol, headlines, file): #print a SYMBOL, url... to the file argum
     #writeThis = writeThis.encode("ascii", "ignore")
     if writeThis:
         print "writing urls for " + symbol + " to output file..."
+        logFile.write("writing urls for " + symbol + " to output file...\n")
         file.write(writeThis)
     else:
         print symbol + " - nothing to write!"
@@ -195,20 +209,26 @@ def writeToOutput(file): #call the printCsv function to write each dictionary en
     for symbol in outputURLs:
         printCsv(symbol, outputURLs[symbol], file)
     print "output written to: " + outputFilePath
+    logFile.write("output written to: " + outputFilePath + "\n")
 
 
 FIRST_TIME = True #signifies the program is being started up, bypasses initial 60-sec wait
 while(True):
     if marketOpen(FIRST_TIME):
         print "Running Article Finder at " + getTime() + " on input directory " + inputFilePath + " and output saved to " + outputFilePath
+        logFile.write("Running Article Finder at " + getTime() + " on input directory " + inputFilePath + " and output saved to " + outputFilePath + "\n")
         outputURLs = {} #dictionary of symbol->url
         symbols = readSymbols(inputFilePath)
         for symbolLine in symbols:
             for symbol in symbolLine:
                 print "parsed symbol: " + symbol
+                logFile.write("parsed symbol: " + symbol + "\n")
                 addURLs(symbol) #populates the outputURLs dictionary and the priceQueue
         outputFile = open(outputFilePath, 'a')
         writeToOutput(outputFile) #writes the outputURLs dictionary to the output file
         outputFile.close()
     FIRST_TIME = False
+
+logFile.write("script shut down - " + getTime())
+logFile.close()
 
