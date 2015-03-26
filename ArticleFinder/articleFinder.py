@@ -7,11 +7,15 @@ import datetime
 import time
 
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0', 'From': 'mdgough@indiana.edu'}
-inputFilePath = sys.argv[1]
-outputFilePath = sys.argv[2]
-rssFileName = "/".join(inputFilePath.split("/")[0:-1]) + "/rssCache_"
-priceFileName = "/".join(inputFilePath.split("/")[0:-1]) + "/prices_"
-logFile = open(outputFilePath + "finder.log", "a")
+inputFilePath = "/".join(sys.argv[0].split("/")[:-1]) + "/symbols.csv"  #symbols
+outputFilePath = "/".join(sys.argv[0].split("/")[:-1]) + "/newsList.txt" #news list
+rssFileName = "/".join(inputFilePath.split("/")[:-1]) + "/rssCache_"
+priceFileName = "/".join(inputFilePath.split("/")[:-1]) + "/prices_"
+
+if "debug" in sys.argv:
+    DEBUG = True
+else:
+    DEBUG = False
 
 
 class Headline:
@@ -58,9 +62,11 @@ def waitSeconds(timeNow, openClose):
 
 def marketOpen(FIRST_TIME): #returns true if the market is open and it has been more than a minute since the last time the script ran
     """this is the regulator/driver function"""
+    if DEBUG:
+        return True
     timeNow = datetime.datetime.now()
     day = datetime.datetime.now().weekday()
-    if day < 5 and (timeNow.hour < 17 or (timeNow.hour == 16 and timeNow.minute < 31)):
+    if day <= 5 and (timeNow.hour < 15 and (timeNow.hour >= 6 and timeNow.minute <= 30)):
         openClose = "open!"
         rv = True
     else:
@@ -167,9 +173,9 @@ def fetchURLs(symbol): #given a symbol, scrape yahoo rss news feed. return list 
         if newFeed["isNew"]: #if the rss has new things, save it to disk and then add the new things to the url download list
             save(rss, rssCache)
             for headline in [item.contents for item in newFeed["new"]]: #for every new url in the newsFeed
-                description = headline[3].text
-                time = convertToEST(headline[5].text)
-                title = headline[0].text
+                description = headline[3].text.encode("ascii", "ignore")
+                time = convertToEST(headline[5].text).encode("ascii", "ignore")
+                title = headline[0].text.encode("ascii", "ignore")
                 print "found article: " + title + " - " + time + " - "+ description
                 logFile.write("found article: " + title + " - " + time + " - "+ description + "\n")
                 url = headline[2]
@@ -214,6 +220,7 @@ def writeToOutput(file): #call the printCsv function to write each dictionary en
 
 FIRST_TIME = True #signifies the program is being started up, bypasses initial 60-sec wait
 while(True):
+    logFile = open("/".join(sys.argv[0].split("/")[:-1]) + "/finder.log", "a")
     if marketOpen(FIRST_TIME):
         print "Running Article Finder at " + getTime() + " on input directory " + inputFilePath + " and output saved to " + outputFilePath
         logFile.write("Running Article Finder at " + getTime() + " on input directory " + inputFilePath + " and output saved to " + outputFilePath + "\n")
@@ -228,7 +235,6 @@ while(True):
         writeToOutput(outputFile) #writes the outputURLs dictionary to the output file
         outputFile.close()
     FIRST_TIME = False
-
-logFile.write("script shut down - " + getTime())
-logFile.close()
+    logFile.write("Article Finder sill running at: " + getTime())
+    logFile.close()
 
