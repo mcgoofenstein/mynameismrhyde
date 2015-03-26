@@ -1,0 +1,416 @@
+It's Thursday, March 26, 2015, at 14:24:21 - The markets are open!
+Running Article Finder at Thu 26 Mar 14:24:21 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+It's Thursday, March 26, 2015, at 14:28:14 - The markets are open!
+Running Article Finder at Thu 26 Mar 14:28:14 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finding URLs for IBM
+fetching price for IBM...
+price saved: 160.57
+ERROR :-( no urls found for: IBM
+parsed symbol: GOOG
+finding URLs for GOOG
+fetching price for GOOG...
+price saved: 563.65
+found article: Google's new CFO gets $70M for defecting from Morgan Stanley - Thu 26 Mar 16:17:15 UTC-04:00 2015 - [AP] - Google's new chief financial officer, Ruth Porat, is being paid more than $70 million for defecting from the same job at investment bank Morgan Stanley. The lucrative pay package disclosed in a Thursday ...
+found article: Google's new CFO gets $70M for defecting from Morgan Stanley - Thu 26 Mar 16:17:15 UTC-04:00 2015 - [AP] - Google's new chief financial officer, Ruth Porat, is being paid more than $70 million for defecting from the same job at investment bank Morgan Stanley. The lucrative pay package disclosed in a Thursday ...
+ERROR :-( no urls found for: GOOG
+parsed symbol: DIS
+finding URLs for DIS
+fetching price for DIS...
+price saved: 105.26
+found article: Over-the-top TV bundles deemed dead on arrival - Thu 26 Mar 13:45:00 UTC-04:00 2015 - 
+found article: Midday Glance: Media companies - Thu 26 Mar 13:20:51 UTC-04:00 2015 - 
+found article: Midday Glance: Media companies - Thu 26 Mar 13:20:51 UTC-04:00 2015 - 
+found article: The 50 most desirable employers for liberal arts students - Thu 26 Mar 11:45:21 UTC-04:00 2015 - [Business Insider] - Grade school kids aren't the only ones who...
+found article: Artist Tyrus Wong and Disney's 'Bambi' - Thu 26 Mar 11:11:55 UTC-04:00 2015 - 
+found article: Apple stock made people rich and that mattered to Steve Jobs - Thu 26 Mar 11:03:34 UTC-04:00 2015 - 
+found article: Downton Abbey, The BBC And PBS Envy - Thu 26 Mar 09:51:00 UTC-04:00 2015 - 
+found article: Early Glance: Media companies - Thu 26 Mar 09:34:38 UTC-04:00 2015 - 
+found article: Early Glance: Media companies - Thu 26 Mar 09:34:38 UTC-04:00 2015 - 
+found article: Fred Wilpon Was Right About The New York Mets And I Was Wrong - Thu 26 Mar 08:19:00 UTC-04:00 2015 - 
+found article: Who are Google's (GOOG) main competitors? - Wed 25 Mar 18:00:01 UTC-04:00 2015 - 
+found article: Final Glance: Media companies - Wed 25 Mar 17:04:05 UTC-04:00 2015 - 
+found article: Final Glance: Media companies - Wed 25 Mar 17:04:05 UTC-04:00 2015 - 
+found article: Making Money With Charles Payne: 03/25/15 - Wed 25 Mar 17:00:49 UTC-04:00 2015 - 
+found article: Are You Willing To Pay $36 Per Month For ESPN? - Wed 25 Mar 16:11:00 UTC-04:00 2015 - 
+found article: Comcast says $45B Time Warner Cable deal to take longer - Wed 25 Mar 13:05:11 UTC-04:00 2015 - 
+found article: Comcast says $45B Time Warner Cable deal to take longer - Wed 25 Mar 13:05:11 UTC-04:00 2015 - 
+found article: MLB Worth $36 Billion As Team Values Hit Record $1.2 Billion Average - Wed 25 Mar 08:48:00 UTC-04:00 2015 - 
+found article: Buffett saves Kraft, Comcast dips & transports hit the Dow: What to watch - Wed 25 Mar 06:58:13 UTC-04:00 2015 - 
+found article: Details on PlayStation Vue, comparison with Sling TV - Wed 25 Mar 02:11:00 UTC-04:00 2015 - 
+writing urls for DIS to output file...
+output written to: /home/michael/mrhyde/ArticleFinder/newsList.txt
+It's Thursday, March 26, 2015, at 14:28:16 - The markets are open!
+waiting 60 seconds before checking servers again...
+Running Article Finder at Thu 26 Mar 14:29:16 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finding URLs for IBM
+fetching price for IBM...
+price saved: 160.57
+no new articles found since last search
+parsed symbol: GOOG
+finding URLs for GOOG
+fetching price for GOOG...
+price saved: 563.65
+no new articles found since last search
+parsed symbol: DIS
+finding URLs for DIS
+fetching price for DIS...
+price saved: 105.26
+no new articles found since last search
+output written to: /home/michael/mrhyde/ArticleFinder/newsList.txt
+It's Thursday, March 26, 2015, at 14:29:17 - The markets are open!
+waiting 60 seconds before checking servers again...
+Running Article Finder at Thu 26 Mar 14:30:17 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finding URLs for IBM
+fetching price for IBM...
+price saved: 160.57
+no new articles found since last search
+parsed symbol: GOOG
+finding URLs for GOOG
+fetching price for GOOG...
+price saved: 563.65
+no new articles found since last search
+parsed symbol: DIS
+finding URLs for DIS
+fetching price for DIS...
+price saved: 105.26
+no new articles found since last search
+output written to: /home/michael/mrhyde/ArticleFinder/newsList.txt
+It's Thursday, March 26, 2015, at 14:30:18 - The markets are open!
+waiting 60 seconds before checking servers again...
+Running Article Finder at Thu 26 Mar 14:31:18 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finding URLs for IBM
+fetching price for IBM...
+price saved: 160.57
+no new articles found since last search
+parsed symbol: GOOG
+finding URLs for GOOG
+fetching price for GOOG...
+price saved: 563.65
+no new articles found since last search
+parsed symbol: DIS
+finding URLs for DIS
+fetching price for DIS...
+price saved: 105.26
+no new articles found since last search
+output written to: /home/michael/mrhyde/ArticleFinder/newsList.txt
+It's Thursday, March 26, 2015, at 14:31:19 - The markets are open!
+waiting 60 seconds before checking servers again...
+Running Article Finder at Thu 26 Mar 14:32:19 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finding URLs for IBM
+fetching price for IBM...
+price saved: 160.57
+no new articles found since last search
+parsed symbol: GOOG
+finding URLs for GOOG
+fetching price for GOOG...
+price saved: 563.65
+no new articles found since last search
+parsed symbol: DIS
+finding URLs for DIS
+fetching price for DIS...
+price saved: 105.26
+no new articles found since last search
+output written to: /home/michael/mrhyde/ArticleFinder/newsList.txt
+It's Thursday, March 26, 2015, at 14:32:20 - The markets are open!
+waiting 60 seconds before checking servers again...
+Running Article Finder at Thu 26 Mar 14:33:20 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finding URLs for IBM
+fetching price for IBM...
+price saved: 160.57
+no new articles found since last search
+parsed symbol: GOOG
+finding URLs for GOOG
+fetching price for GOOG...
+price saved: 563.65
+no new articles found since last search
+parsed symbol: DIS
+finding URLs for DIS
+fetching price for DIS...
+price saved: 105.26
+no new articles found since last search
+output written to: /home/michael/mrhyde/ArticleFinder/newsList.txt
+It's Thursday, March 26, 2015, at 14:33:21 - The markets are open!
+waiting 60 seconds before checking servers again...
+Running Article Finder at Thu 26 Mar 14:34:21 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finding URLs for IBM
+fetching price for IBM...
+price saved: 160.57
+no new articles found since last search
+parsed symbol: GOOG
+finding URLs for GOOG
+fetching price for GOOG...
+price saved: 563.65
+no new articles found since last search
+parsed symbol: DIS
+finding URLs for DIS
+fetching price for DIS...
+price saved: 105.26
+no new articles found since last search
+output written to: /home/michael/mrhyde/ArticleFinder/newsList.txt
+It's Thursday, March 26, 2015, at 14:34:22 - The markets are open!
+waiting 60 seconds before checking servers again...
+Running Article Finder at Thu 26 Mar 14:35:22 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finding URLs for IBM
+fetching price for IBM...
+price saved: 160.57
+no new articles found since last search
+parsed symbol: GOOG
+finding URLs for GOOG
+fetching price for GOOG...
+price saved: 563.65
+no new articles found since last search
+parsed symbol: DIS
+finding URLs for DIS
+fetching price for DIS...
+price saved: 105.26
+no new articles found since last search
+output written to: /home/michael/mrhyde/ArticleFinder/newsList.txt
+It's Thursday, March 26, 2015, at 14:35:23 - The markets are open!
+waiting 60 seconds before checking servers again...
+Running Article Finder at Thu 26 Mar 14:36:23 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finding URLs for IBM
+fetching price for IBM...
+price saved: 160.57
+no new articles found since last search
+parsed symbol: GOOG
+finding URLs for GOOG
+fetching price for GOOG...
+price saved: 563.65
+no new articles found since last search
+parsed symbol: DIS
+finding URLs for DIS
+fetching price for DIS...
+price saved: 105.26
+no new articles found since last search
+output written to: /home/michael/mrhyde/ArticleFinder/newsList.txt
+It's Thursday, March 26, 2015, at 14:36:24 - The markets are open!
+waiting 60 seconds before checking servers again...
+Running Article Finder at Thu 26 Mar 14:37:24 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finding URLs for IBM
+fetching price for IBM...
+price saved: 160.57
+no new articles found since last search
+parsed symbol: GOOG
+finding URLs for GOOG
+fetching price for GOOG...
+price saved: 563.65
+no new articles found since last search
+parsed symbol: DIS
+finding URLs for DIS
+fetching price for DIS...
+price saved: 105.26
+no new articles found since last search
+output written to: /home/michael/mrhyde/ArticleFinder/newsList.txt
+It's Thursday, March 26, 2015, at 14:37:25 - The markets are open!
+waiting 60 seconds before checking servers again...
+Running Article Finder at Thu 26 Mar 14:38:25 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finding URLs for IBM
+fetching price for IBM...
+price saved: 160.57
+no new articles found since last search
+parsed symbol: GOOG
+finding URLs for GOOG
+fetching price for GOOG...
+price saved: 563.65
+no new articles found since last search
+parsed symbol: DIS
+finding URLs for DIS
+fetching price for DIS...
+price saved: 105.26
+no new articles found since last search
+output written to: /home/michael/mrhyde/ArticleFinder/newsList.txt
+It's Thursday, March 26, 2015, at 14:38:26 - The markets are open!
+waiting 60 seconds before checking servers again...
+Running Article Finder at Thu 26 Mar 14:39:26 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finRunning Article Finder at Thu 26 Mar 16:13:15 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finding URLs for IBM
+fetching price for IBM...
+price saved: 160.57
+no new articles found since last search
+parsed symbol: GOOG
+finding URLs for GOOG
+fetching price for GOOG...
+price saved: 563.65
+found article: Google to pay Ruth Porat more than $70m in her first year - Thu 26 Mar 17:57:55 UTC-04:00 2015 - [at Financial Times] - Ruth Porat, the outgoing chief financial officer of Morgan Stanley, is set to receive cash and stock worth more than $70m in the first year after she swaps coasts to become the top finance official at ...
+found article: Google's new CFO gets $70M for defecting from Morgan Stanley - Thu 26 Mar 17:31:45 UTC-04:00 2015 - [AP] - Google just found out that luring a top executive from Wall Street to Silicon Valley is expensive. The Mountain View, California, company is paying its new chief financial officer, Ruth Porat, more than ...
+found article: Google's new CFO gets $70M for defecting from Morgan Stanley - Thu 26 Mar 17:31:33 UTC-04:00 2015 - [AP] - Google just found out that luring a top executive from Wall Street to Silicon Valley is expensive. The Mountain View, California, company is paying its new chief financial officer, Ruth Porat, more than ...
+found article: Skyworks a long-term winner? CEO makes the case - Thu 26 Mar 17:15:00 UTC-04:00 2015 - 
+found article: Final Glance: Internet companies - Thu 26 Mar 17:07:17 UTC-04:00 2015 - [AP] - Shares of some top Internet companies were mixed at the close of trading: Amazon fell $3.61 or 1.0 percent, to $367.35. eBay fell $.55 or .9 percent, to $57.52. Google Inc class A fell $3.36 or .6 percent, ...
+found article: Final Glance: Internet companies - Thu 26 Mar 17:07:17 UTC-04:00 2015 - [AP] - Shares of some top Internet companies were mixed at the close of trading: Amazon fell $3.61 or 1.0 percent, to $367.35. eBay fell $.55 or .9 percent, to $57.52. Google Inc class A fell $3.36 or .6 percent, ...
+found article: Google, other big tech companies team up for digital spying reform - Thu 26 Mar 16:45:11 UTC-04:00 2015 - 
+found article: Harmon.ie CEO Says Email, Social Tools Should Complement One Another - Thu 26 Mar 16:05:07 UTC-04:00 2015 - [at The Wall Street Journal] - Yaacov Cohen says social media provides the information that informs decision-making, but when the time comes to make a decision, he finds that email is the tool of choice. Email is our task manager. ...
+found article: Google details pay for incoming financial chief - Thu 26 Mar 16:04:23 UTC-04:00 2015 - [at MarketWatch] - Ruth Porat will earn a base salary of $650,000, and the tech giant also agreed to pay her a $5 million one-time sign-on bonus, a $25 million new hire grant, and a $40 million biennial grant that begins ...
+found article: China's Silicon Valley: Zhongguancun - Thu 26 Mar 16:01:00 UTC-04:00 2015 - 
+found article: ECO:nomics: Tech Breakthroughs for Energy Industry - Thu 26 Mar 14:49:50 UTC-04:00 2015 - 
+found article: ECO:nomics: Are We Killing Coal? - Thu 26 Mar 14:44:50 UTC-04:00 2015 - [at MarketWatch] - Robert Murray, CEO of Murray Energy Corporation says that the U.S. power grid requires a large caseload of coal-fired energy to be reliable. He says he does not believe coal power is having a large effect ...
+found article: Why the NASDAQs 5,000 Level Is Not Like the Dot Com Bubble - Thu 26 Mar 14:13:49 UTC-04:00 2015 - 
+found article: ECO:nomics: Decreasing Costs of Renewables - Thu 26 Mar 13:22:55 UTC-04:00 2015 - [at MarketWatch] - Suzlon Group Chairman Tulsi Tanti talks about decreasing cost trendss in renewable energy production and says he believes costs will continue to decrease. He speaks with WSJs Russel Gold at the ECO:nomics ...
+found article: Midday Glance: Internet companies - Thu 26 Mar 13:20:49 UTC-04:00 2015 - [AP] - Shares of some top internet companies are mixed at 1 p.m.: Amazon fell $3.04 or .8 percent, to $367.92. eBay fell $.44 or .8 percent, to $57.62. Google Inc class A fell $3.99 or .7 percent, to $563.01. ...
+found article: Midday Glance: Internet companies - Thu 26 Mar 13:20:49 UTC-04:00 2015 - [AP] - Shares of some top internet companies are mixed at 1 p.m.: Amazon fell $3.04 or .8 percent, to $367.92. eBay fell $.44 or .8 percent, to $57.62. Google Inc class A fell $3.99 or .7 percent, to $563.01. ...
+found article: How Youtube Ad Revenue Works - Thu 26 Mar 13:01:00 UTC-04:00 2015 - [at Investopedia] - Many people make money off of their YouTube videos through ad revenue, but just exactly how does Youtube Ad Revenue work? Quite simply, it turns out.
+found article: Highlights From Facebook's (FB) F8 Developers Conference - Stocks in the News - Thu 26 Mar 12:48:05 UTC-04:00 2015 - 
+found article: Amazon.com Expands One-Day Delivery To Beat Google - Thu 26 Mar 12:43:00 UTC-04:00 2015 - [at Investor's Business Daily] - Amazon.com (AMZN) continues to race Google to offer the fastest delivery of goods purchased online, expanding its Prime Now service to Dallas. No. 1 e-tailer Amazon on Thursday said it has extended its ...
+found article: What to do as Google prepares to break out - Thu 26 Mar 12:20:58 UTC-04:00 2015 - [at MarketWatch] - The stock is in a fine position to make a run at new all-time highs, and assuming the expected short-term pullback takes place, could give traders a nice level to get in and take advantage.
+parsed symbol: DIS
+finding URLs for DIS
+fetching price for DIS...
+price saved: 105.26
+found article: Florida debates gambling as big players lay down their bets - Thu 26 Mar 17:22:15 UTC-04:00 2015 - 
+found article: Final Glance: Media companies - Thu 26 Mar 17:07:17 UTC-04:00 2015 - 
+found article: Final Glance: Media companies - Thu 26 Mar 17:07:17 UTC-04:00 2015 - 
+found article: Over-the-top TV bundles deemed dead on arrival - Thu 26 Mar 16:11:00 UTC-04:00 2015 - 
+found article: Midday Glance: Media companies - Thu 26 Mar 13:20:51 UTC-04:00 2015 - 
+found article: Midday Glance: Media companies - Thu 26 Mar 13:20:51 UTC-04:00 2015 - 
+found article: The 50 most desirable employers for liberal arts students - Thu 26 Mar 11:45:21 UTC-04:00 2015 - [Business Insider] - Grade school kids aren't the only ones who...
+found article: Artist Tyrus Wong and Disney's 'Bambi' - Thu 26 Mar 11:11:55 UTC-04:00 2015 - 
+found article: Apple stock made people rich and that mattered to Steve Jobs - Thu 26 Mar 11:03:34 UTC-04:00 2015 - 
+found article: Downton Abbey, The BBC And PBS Envy - Thu 26 Mar 09:51:00 UTC-04:00 2015 - 
+found article: Early Glance: Media companies - Thu 26 Mar 09:34:38 UTC-04:00 2015 - 
+found article: Early Glance: Media companies - Thu 26 Mar 09:34:38 UTC-04:00 2015 - 
+found article: Fred Wilpon Was Right About The New York Mets And I Was Wrong - Thu 26 Mar 08:19:00 UTC-04:00 2015 - 
+found article: Who are Google's (GOOG) main competitors? - Wed 25 Mar 18:00:01 UTC-04:00 2015 - 
+found article: Making Money With Charles Payne: 03/25/15 - Wed 25 Mar 17:00:49 UTC-04:00 2015 - 
+found article: Are You Willing To Pay $36 Per Month For ESPN? - Wed 25 Mar 16:11:00 UTC-04:00 2015 - 
+found article: Comcast says $45B Time Warner Cable deal to take longer - Wed 25 Mar 13:05:11 UTC-04:00 2015 - 
+found article: Comcast says $45B Time Warner Cable deal to take longer - Wed 25 Mar 13:05:11 UTC-04:00 2015 - 
+found article: MLB Worth $36 Billion As Team Values Hit Record $1.2 Billion Average - Wed 25 Mar 08:48:00 UTC-04:00 2015 - 
+found article: Buffett saves Kraft, Comcast dips & transports hit the Dow: What to watch - Wed 25 Mar 06:58:13 UTC-04:00 2015 - 
+writing urls for GOOG to output file...
+writing urls for DIS to output file...
+output written to: /home/michael/mrhyde/ArticleFinder/newsList.txt
+Running Article Finder at Thu 26 Mar 16:13:17 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finding URLs for IBM
+fetching price for IBM...
+price saved: 160.57
+no new articles found since last search
+parsed symbol: GOOG
+finding URLs for GOOG
+fetching price for GOOG...
+price saved: 563.65
+no new articles found since last search
+parsed symbol: DIS
+finding URLs for DIS
+fetching price for DIS...
+price saved: 105.26
+no new articles found since last search
+output written to: /home/michael/mrhyde/ArticleFinder/newsList.txt
+Running Article Finder at Thu 26 Mar 16:13:22 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finding URLs for IBM
+fetching price for IBM...
+price saved: 160.57
+no new articles found since last search
+parsed symbol: GOOG
+finding URLs for GOOG
+fetching price for GOOG...
+price saved: 563.65
+no new articles found since last search
+parsed symbol: DIS
+finding URLs for DIS
+fetching price for DIS...
+price saved: 105.26
+no new articles found since last search
+output written to: /home/michael/mrhyde/ArticleFinder/newsList.txt
+Running Article Finder at Thu 26 Mar 16:13:24 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finding URLs for IBM
+fetching price for IBM...
+price saved: 160.57
+no new articles found since last search
+parsed symbol: GOOG
+finding URLs for GOOG
+fetching price for GOOG...
+price saved: 563.65
+no new articles found since last search
+parsed symbol: DIS
+finding URLs for DIS
+fetching price for DIS...
+price saved: 105.26
+no new articles found since last search
+output written to: /home/michael/mrhyde/ArticleFinder/newsList.txt
+Running Article Finder at Thu 26 Mar 16:13:27 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finding URLs for IBM
+fetching price for IBM...
+price saved: 160.57
+no new articles found since last search
+parsed symbol: GOOG
+finding URLs for GOOG
+fetching price for GOOG...
+price saved: 563.65
+no new articles found since last search
+parsed symbol: DIS
+finding URLs for DIS
+fetching price for DIS...
+price saved: 105.26
+no new articles found since last search
+output written to: /home/michael/mrhyde/ArticleFinder/newsList.txt
+Running Article Finder at Thu 26 Mar 16:13:29 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finding URLs for IBM
+fetching price for IBM...
+price saved: 160.57
+no new articles found since last search
+parsed symbol: GOOG
+finding URLs for GOOG
+fetching price for GOOG...
+price saved: 563.65
+no new articles found since last search
+parsed symbol: DIS
+finding URLs for DIS
+fetching price for DIS...
+price saved: 105.26
+no new articles found since last search
+output written to: /home/michael/mrhyde/ArticleFinder/newsList.txt
+Running Article Finder at Thu 26 Mar 16:13:31 2015 UTC-4:00 2015 on input directory /home/michael/mrhyde/ArticleFinder/symbols.csv and output saved to /home/michael/mrhyde/ArticleFinder/newsList.txt
+reading input file at: /home/michael/mrhyde/ArticleFinder/symbols.csv
+parsed symbol: IBM
+finding URLs for IBM
+fetching price for IBM...
+price saved: 160.57
+no new articles found since last search
+parsed symbol: GOOG
+finding URLs for GOOG
+fetching price for GOOG...
+price saved: 563.65
+no new articles found since last search
+parsed symbol: DIS
+finding URLs for DIS
+fetching price for DIS...
+price saved: 105.26
+no new articles found since last search
+output written to: /home/michael/mrhyde/ArticleFinder/newsList.txt
+Running Article Finder at Thu 26 Mar 16:13:34 2015 UTC-4:00 2015 on
