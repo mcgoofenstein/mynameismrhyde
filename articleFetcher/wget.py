@@ -23,6 +23,11 @@ ALL_SYMBOLS = []
 ARTICLE_BASE_DIRECTORY = sys.argv[1]
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0', 'From': 'mdgough12@gmail.com'}
 inputFilePath = sys.argv[2]
+logPath = ARTICLE_BASE_DIRECTORY + "/fetcher.log"
+logFile = open(logPath, "a")
+
+def newArticlesFound():
+    return True
 
 def getTime():
     #TODO: daylight savings time detector...
@@ -40,7 +45,8 @@ def fetch(article):
             article["url"] += "&page=all"
             fetch(article)
     except:
-        print "error fetching url: " #+ url + " - skipping..."
+        print "error fetching url: " + url + " - skipping..."
+        logFile.write("error fetching url: " + url + " - skipping...\n")
     return article, soup
 
 
@@ -55,6 +61,7 @@ def save(articleSoup): #takes a single json object and saves the webpage from it
     outputFile.write(timeString)
     outputFile.write(soup.encode('utf8'))
     print "saved page to " + path
+    logFile.write("saved page to " + path + "\n")
     outputFile.close()
 
 
@@ -63,6 +70,7 @@ def parseInput(inputFileLines):
     for line in inputFileLines:
         article = json.loads(line)
         print "found article for " + article["symbol"] + ": " + article["title"]
+        logFile.write("found article for " + article["symbol"] + ": " + article["title"] + "\n")
         articles.append(article)
     return articles
 
@@ -73,14 +81,23 @@ def readInputFile(inputFilePath):
     inputFile.close()
     return inputLines
 
-try:
-    print "Running Article Downloader at " + getTime() + " on input directory " + inputFilePath + " and output path " + ARTICLE_BASE_DIRECTORY
-    inputFileLines = readInputFile(inputFilePath) #inputFileLines is JSON from file
-    articles = parseInput(inputFileLines) #articles is list of JSON objects
+while(True):
+    if newArticlesFound():
+        try:
+            print "Running Article Downloader at " + getTime() + " on input directory " + inputFilePath + " and output path " + ARTICLE_BASE_DIRECTORY
+            logFile.write("Running Article Downloader at " + getTime() + " on input directory " + inputFilePath + " and output path " + ARTICLE_BASE_DIRECTORY + "\n")
+            inputFileLines = readInputFile(inputFilePath) #inputFileLines is JSON from file
+            articles = parseInput(inputFileLines) #articles is list of JSON objects
 
-    for article in articles:
-        save(fetch(article))
-    print "- " + getTime() + " - Article Downloader finished downloading " + str(len(articles)) + " news pages."
+            for article in articles:
+                save(fetch(article))
 
-except IOError:
-    "Says the Article Fetcher: B-But sir! There's nothing here..."
+            print "- " + getTime() + " - Article Downloader finished downloading " + str(len(articles)) + " news pages."
+            logFile.write("- " + getTime() + " - Article Downloader finished downloading " + str(len(articles)) + " news pages.\n")
+
+        except IOError:
+            print "Article Fetcher at " + getTime() + ": IOError! There's nothing here..."
+            logFile.write("Article Fetcher at " + getTime() + ": IOError! There's nothing here...")
+    else:
+        print "no new articles found to download"
+        logFile.write(getTime() + ": no new articles found to download")
