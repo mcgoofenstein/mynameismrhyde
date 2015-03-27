@@ -107,7 +107,7 @@ def markNewRss(rss, file): #returns a dictionary object which has keys to lists 
         r["isNew"] = False
     return r
 
-def save(rss, file): #saves the given rss into the given rssCache file
+def saveRSS(rss, file): #saves the given rss into the given rssCache file
     file.close()
     file = open(file.name, "w")
     for line in rss:
@@ -171,7 +171,7 @@ def fetchURLs(symbol): #given a symbol, scrape yahoo rss news feed. return list 
         rss = requests.get(feed, headers=HEADERS).content
         newFeed = markNewRss(rss, rssCache) #check to see if this rss feed has anything new
         if newFeed["isNew"]: #if the rss has new things, save it to disk and then add the new things to the url download list
-            save(rss, rssCache)
+            saveRSS(rss, rssCache)
             for headline in [item.contents for item in newFeed["new"]]: #for every new url in the newsFeed
                 description = headline[3].text.encode("ascii", "ignore")
                 time = convertToEST(headline[5].text).encode("ascii", "ignore")
@@ -201,7 +201,7 @@ def writeJSON(symbol, headlines):
     return outputString
 
 
-def printCsv(symbol, headlines, file): #print a SYMBOL, url... to the file argument
+def printJSON(symbol, headlines, file): #print a SYMBOL, url... to the file argument
     writeThis = writeJSON(symbol, headlines)
     #writeThis = writeThis.encode("ascii", "ignore")
     if writeThis:
@@ -213,9 +213,20 @@ def printCsv(symbol, headlines, file): #print a SYMBOL, url... to the file argum
 
 def writeToOutput(file): #call the printCsv function to write each dictionary entry to the output file
     for symbol in outputURLs:
-        printCsv(symbol, outputURLs[symbol], file)
+        printJSON(symbol, outputURLs[symbol], file)
     print "output written to: " + outputFilePath
     logFile.write("output written to: " + outputFilePath + "\n")
+
+def openOutputFile(outputFilePath):
+    try:
+        print getTime() + " attempting to open news list output file: " + outputFilePath
+        logFile.write(getTime() + " attempting to open news list output file: " + outputFilePath)
+        return open(outputFilePath, 'a')
+    except:
+        print getTime() + " failed to open news list output file; retrying..."
+        logFile.write(getTime() + " failed to open news list output file; retrying...")
+        time.sleep(30)
+        openOutputFile(outputFilePath)
 
 
 FIRST_TIME = True #signifies the program is being started up, bypasses initial 60-sec wait
@@ -231,10 +242,11 @@ while(True):
                 print "parsed symbol: " + symbol
                 logFile.write("parsed symbol: " + symbol + "\n")
                 addURLs(symbol) #populates the outputURLs dictionary and the priceQueue
-        outputFile = open(outputFilePath, 'a')
-        writeToOutput(outputFile) #writes the outputURLs dictionary to the output file
+        outputFile = openOutputFile(outputFilePath)
+        writeToOutput(outputFile) #writes the outputURLs json object to the output file
         outputFile.close()
     FIRST_TIME = False
-    logFile.write("Article Finder sill running at: " + getTime())
+    logFile.write("Article Finder sill running at: " + getTime() + "\n")
     logFile.close()
+    time.sleep(60)
 
