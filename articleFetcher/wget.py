@@ -18,16 +18,31 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import datetime
+import time
 
 ALL_SYMBOLS = []
 ARTICLE_BASE_DIRECTORY = sys.argv[1]
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0', 'From': 'mdgough12@gmail.com'}
 inputFilePath = sys.argv[2]
 logPath = ARTICLE_BASE_DIRECTORY + "/fetcher.log"
-logFile = open(logPath, "a")
 
-def newArticlesFound():
-    return True
+
+def newArticlesFound(): #check to see if the newslist has things to download
+    try:
+        with open(inputFilePath, "r") as newsListFile:
+            newsListItems = [line for line in newsListFile.readlines() if len(line) > 1]
+            if len(newsListItems) > 0:
+                logFile.write(getTime() + ": Article Downloader found " + str(len(newsListItems)) + " new articles to retrieve")
+                print getTime() + ": Article Downloader found " + str(len(newsListItems)) + " new articles to retrieve"
+                return True
+            else:
+                return False
+    except:
+        print getTime() + ": news file is locked or does not exist - retrying"
+        logFile.write(getTime() + ": news file is locked or does not exist - retrying")
+        time.sleep(30)
+
+
 
 def getTime():
     #TODO: daylight savings time detector...
@@ -40,6 +55,7 @@ def fetch(article):
     url = article["url"]
     try:
         print "fetching url: " + url
+        logFile.write("fetching url: " + url)
         soup = BeautifulSoup(requests.get(url, headers=HEADERS).content, "lxml")
         if "View All" in soup.text and url[-9:] != "&page=all":
             article["url"] += "&page=all"
@@ -50,7 +66,7 @@ def fetch(article):
     return article, soup
 
 
-def save(articleSoup): #takes a single json object and saves the webpage from its url to disk
+def saveArticle(articleSoup): #takes a single json object and saves the webpage from its url to disk
     articleObject = articleSoup[0]
     soup = articleSoup[1]
     path = str(os.path.join(ARTICLE_BASE_DIRECTORY + "/" + articleObject["symbol"] + "/").replace("//","/"))
@@ -65,32 +81,48 @@ def save(articleSoup): #takes a single json object and saves the webpage from it
     outputFile.close()
 
 
-def parseInput(inputFileLines):
+def parseInput(inputFileLines, log):
     articles = []
-    for line in inputFileLines:
+    for line in [line.strip() for line in inputFileLines if len(line)>2]:
         article = json.loads(line)
-        print "found article for " + article["symbol"] + ": " + article["title"]
-        logFile.write("found article for " + article["symbol"] + ": " + article["title"] + "\n")
+        if log:
+            print "found article for " + article["symbol"] + ": " + article["title"]
+            logFile.write("found article for " + article["symbol"] + ": " + article["title"] + "\n")
         articles.append(article)
     return articles
 
 
 def readInputFile(inputFilePath):
-    inputFile = open(inputFilePath, 'r')
-    inputLines = inputFile.readlines()
-    inputFile.close()
-    return inputLines
+    with open(inputFilePath, 'r') as inputFile:
+        inputLines = [line + "}" for line in inputFile.read().split("}")]
+        return inputLines
+
+def saveNewsList(articles):
+    with open(inputFilePath, "w") as newsList:
+        for article in articles:
+            newsList.write(json.dumps(article) + "\n")
+
+
+def removeFromNewsList(article): #takes a JSON article object and removes that entry from the newsList.txt file
+    articlesInFile = parseInput(readInputFile(inputFilePath), log=False)
+    if article in articlesInFile or article["title"] in [article["title"] for article in articlesInFile]: #matches entire article or just title
+        articlesInFile.remove(article) # remove the one we just downloaded
+    saveNewsList(articlesInFile) #save the remaining
+
+
 
 while(True):
-    if newArticlesFound():
+    logFile = open(logPath, "a")
+    if newArticlesFound(): # check the newsList for any articles
         try:
             print "Running Article Downloader at " + getTime() + " on input directory " + inputFilePath + " and output path " + ARTICLE_BASE_DIRECTORY
             logFile.write("Running Article Downloader at " + getTime() + " on input directory " + inputFilePath + " and output path " + ARTICLE_BASE_DIRECTORY + "\n")
             inputFileLines = readInputFile(inputFilePath) #inputFileLines is JSON from file
-            articles = parseInput(inputFileLines) #articles is list of JSON objects
+            articles = parseInput(inputFileLines, log=True) #articles is list of JSON objects
 
             for article in articles:
-                save(fetch(article))
+                saveArticle(fetch(article)) #fetch and save each article
+                removeFromNewsList(article) #remove that article from the list of articles to download so we can check for new ones next time
 
             print "- " + getTime() + " - Article Downloader finished downloading " + str(len(articles)) + " news pages."
             logFile.write("- " + getTime() + " - Article Downloader finished downloading " + str(len(articles)) + " news pages.\n")
@@ -99,5 +131,8 @@ while(True):
             print "Article Fetcher at " + getTime() + ": IOError! There's nothing here..."
             logFile.write("Article Fetcher at " + getTime() + ": IOError! There's nothing here...")
     else:
-        print "no new articles found to download"
+        print getTime() + ": no new articles found to download"
         logFile.write(getTime() + ": no new articles found to download")
+    logFile.close()
+    time.sleep(60)
+
