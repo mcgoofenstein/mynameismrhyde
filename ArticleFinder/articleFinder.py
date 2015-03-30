@@ -130,11 +130,11 @@ def getPrice(symbol):
         priceFile.write(json.dumps({"LastPrice":price,"ChangePercent":changePct,"Timestamp":time,"Volume":volume,"ChangePercentYTD":changeYTD,"High":high,"Low":low,"Open":openPrice})+"\n")
         priceFile.close()
         print "price saved: " + str(price)
-        logFile.write("price saved: " + str(price) + "\n")
+        logFile.write(getTime() + " - price saved: " + str(price) + "\n")
         return str(price)
     except:
         print "error saving price... re-trying"
-        logFile.write("error saving price... re-trying\n")
+        logFile.write(getTime() + " - error saving price... re-trying\n")
         time.sleep(3)
         return getPrice(symbol)
 
