@@ -126,7 +126,8 @@ def getPrice(symbol):
         volume = apiReturn["Volume"]
         changeYTD = apiReturn["ChangePercentYTD"]
         high,low,openPrice = apiReturn["High"], apiReturn["Low"], apiReturn["Open"]
-        priceFile = open(priceFileName+symbol, "a")
+        logFile.write(getTime() + " attempting to write price for " + symbol + " to price file at base directory " + priceFileName + "\n")
+        priceFile = open(priceFileName+symbol, "a+")
         priceFile.write(json.dumps({"LastPrice":price,"ChangePercent":changePct,"Timestamp":time,"Volume":volume,"ChangePercentYTD":changeYTD,"High":high,"Low":low,"Open":openPrice})+"\n")
         priceFile.close()
         print "price saved: " + str(price)
