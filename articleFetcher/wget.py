@@ -24,7 +24,7 @@ ALL_SYMBOLS = []
 ARTICLE_BASE_DIRECTORY = sys.argv[1]
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0', 'From': 'mdgough12@gmail.com'}
 inputFilePath = sys.argv[2]
-logPath = ARTICLE_BASE_DIRECTORY + "/fetcher.log"
+logPath = ARTICLE_BASE_DIRECTORY + "fetcher.log"
 TEXT_EXTRACTION_API = "https://api.idolondemand.com/1/api/sync/extracttext/v1?url="
 API_KEY = "&extract_metadata=false&additional_metadata=&reference_prefix=&password=&apikey=0dac1111-f576-4f78-8a17-b7fbe3725959"
 
