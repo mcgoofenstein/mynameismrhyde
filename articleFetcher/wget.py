@@ -134,7 +134,7 @@ def removeFromNewsList(article): #takes a JSON article object and removes that e
 
 
 while(True):
-    logFile = open(logPath, "a")
+    logFile = open(logPath, "a+")
     if newArticlesFound(): # check the newsList for any articles
         try:
             print "Running Article Downloader at " + getTime() + " on input directory " + inputFilePath + " and output path " + ARTICLE_BASE_DIRECTORY
