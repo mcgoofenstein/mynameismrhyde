@@ -9,9 +9,11 @@ else
 MR_HYDE=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 python $MR_HYDE/ArticleFinder/articleFinder.py debug &
 echo "article finder executed at $(date)" >> main.log
-sleep 60
+sleep 60 &
 python $MR_HYDE/articleFetcher/wget.py $MR_HYDE/articles/ $MR_HYDE/ArticleFinder/newsList.txt &
 echo "article fetch executed at $(date)" >> main.log
 fi
-sleep 1200
+sleep 1200 &
+python $MR_HYDE/DataMiner/mine.py &
+echo "$(date) - analyzing available data..." >> main.log
 done

@@ -14,34 +14,44 @@ OUTPUT: csv file for data analysis
 """
 
 class Article:
-    API1 = "https://api.idolondemand.com/1/api/sync/analyzesentiment/v1?text=%22"
-    API2 = "%22&apikey=0dac1111-f576-4f78-8a17-b7fbe3725959"
-
     def __init__(self, symbol, filepath, title):
         self.title = title
         self.symbol = symbol
-        self.pricesFile = "/".join(filepath.split("/")[:-3] + ["ArticleFinder"]  + ["prices_" + self.symbol.upper()])
+        with open("/".join(filepath.split("/")[:-3] + ["ArticleFinder"] + ["prices_" + self.symbol.upper()]), "r") as pricesFile:
+            self.priceLines = pricesFile.readlines()
         with open(filepath, "r") as inputFile:
             self.contents = inputFile.readlines()
             self.text = self.getText(self.contents)
-            self.pubTime = ":".join(self.contents[0].lstrip("Published Time: ").split(":")[:2])
-        self.price = self.getPrice(self.pricesFile, self.pubTime)
-        self.laterPrice = self.getPrice(self.pricesFile, datetime.datetime.strptime(self.pubTime, "%a %b %d %H:%M:%S UTC-04:00 %Y") + timedelta(minutes=20))
+            self.pubTime = self.getTime(self.contents[0])
+        self.price = self.getPrice(self.priceLines, self.pubTime)
+        self.laterPrice = self.getPrice(self.priceLines, self.pubTime + timedelta(minutes=20))
         self.sentiment = self.getSentiment(self.text)
 
-    def getPrice(self, pricePath, time):
-        with open(pricePath, "r") as priceFile:
-            priceLines = priceFile.readlines()
-            price = [(json.loads(line))["LastPrice"] for line in priceFile if time in json.loads(line)["Timestamp"]]
-            if not price:
-                return " "
-            if len(price) == 1:
-                return price[0]
-            if len(price > 1):
-                return str(sum(price)/float(len(price)))
+    def getTime(self, timeString):
+        try:
+            time = datetime.datetime.strptime(timeString.lstrip("Published Time: ").strip().replace("UTC-04:00 ", "").replace("-",""), "%a %d %b %H:%M:%S %Y")
+        except:
+            time = datetime.datetime.min
+        return time
+
+    def getPrice(self, priceLines, time):
+        price = [(json.loads(line))["LastPrice"] for line in priceLines if sameTime(json.loads(line)["Timestamp"], time)]
+        if not price:
+            return "NA"
+        if len(price) == 1:
+            return price[0]
+        if len(price) > 1:
+            return str(sum(price)/float(len(price)))
 
     def getSentiment(self, text):
-        return json.loads(requests.get(Article.API1 + text + Article.API2).content)["aggregate"]
+        try:
+            text = text.replace("#", "").replace("%","")
+            data = {"text":text ,"apikey":"0dac1111-f576-4f78-8a17-b7fbe3725959"}
+            url = "https://api.idolondemand.com/1/api/sync/analyzesentiment/v1"
+            request = requests.post(url, data=data).content
+            return json.loads(request)["aggregate"]
+        except:
+            return {"sentiment":"error", "score":0}
 
 
     def getText(self, contents):
@@ -52,7 +62,17 @@ class Article:
             return max(texts, key=len)
 
     def writeCSV(self):
-        return "\t".join([self.symbol, self.pubTime, self.sentiment, self.price, self.laterPrice])
+        return "\t".join([self.symbol, self.title, str(self.pubTime), str(self.sentiment["score"]), self.sentiment["sentiment"], str(self.price), str(self.laterPrice)])
+
+
+def sameTime(timeStamp, time): #compares two timestamps for approximate equality
+    timeStamp = datetime.datetime.strptime(timeStamp.replace("UTC-04:00 ", ""), "%a %b %d %H:%M:%S %Y")
+    if (timeStamp - time).seconds < 120:
+        return True
+    else:
+        return False
+
+
 
 
 def getArticles(articlesDir): #retuns {symbol:([articlePaths], [articleTitles])}
