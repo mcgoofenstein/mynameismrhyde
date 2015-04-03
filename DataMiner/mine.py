@@ -29,9 +29,9 @@ class Article:
         self.laterPrice = self.getPrice(self.pubTime + timedelta(minutes=20), priceDictionary, sortedDates, when="after")
         self.sentiment = self.getSentiment(self.text, filepath, self.contents)
 
-    def getPrice(self, pubTime, priceDictionary, sortedDates):
+    def getPrice(self, pubTime, priceDictionary, sortedDates, when="before"):
         if not marketOpen(pubTime):
-            pubTime = adjustToMarketOpen(pubTime, sortedDates, when="before")
+            pubTime = adjustToMarketOpen(pubTime, sortedDates, when)
         matchingTimes = [date for date in sortedDates if abs((pubTime - date).days) == 0 and abs((pubTime - date).seconds) < 90]
         prices = [priceDictionary[time]["LastPrice"] for time in matchingTimes]
         if not prices:
