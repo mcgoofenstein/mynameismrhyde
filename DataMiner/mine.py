@@ -26,12 +26,12 @@ class Article:
             self.text = self.getText(self.contents)
             self.pubTime = getTime(self.contents[0])
         self.price = self.getPrice(self.pubTime, priceDictionary, sortedDates)
-        self.laterPrice = self.getPrice(self.pubTime + timedelta(minutes=20), priceDictionary, sortedDates)
+        self.laterPrice = self.getPrice(self.pubTime + timedelta(minutes=20), priceDictionary, sortedDates, when="after")
         self.sentiment = self.getSentiment(self.text, filepath, self.contents)
 
     def getPrice(self, pubTime, priceDictionary, sortedDates):
         if not marketOpen(pubTime):
-            pubTime = adjustToMarketOpen(pubTime, sortedDates)
+            pubTime = adjustToMarketOpen(pubTime, sortedDates, when="before")
         matchingTimes = [date for date in sortedDates if abs((pubTime - date).days) == 0 and abs((pubTime - date).seconds) < 90]
         prices = [priceDictionary[time]["LastPrice"] for time in matchingTimes]
         if not prices:
@@ -72,13 +72,16 @@ class Article:
         return "\t".join([self.symbol, self.title, str(self.pubTime), str(self.sentiment["score"]), self.sentiment["sentiment"], str(self.price), str(self.laterPrice)])
 
 
-def adjustToMarketOpen(time, list): #changes a time to the the closest past time in the list when the market was open
+def adjustToMarketOpen(time, list, when): #changes a time to the the closest past time in the list when the market was open
     if time > max(list): #if the time is beyond the list of times to check, return latest open time
         return max([moment for moment in list if marketOpen(moment)])
     if time < min(list):
         return min([moment for moment in list if marketOpen(moment)])
     # time must fit into the list somewhere in this case:
-    return list[bisect.bisect_left([moment for moment in list if marketOpen(moment)], time)]
+    if when == "before":
+        return list[bisect.bisect_left([moment for moment in list if marketOpen(moment)], time)]
+    if when == "after":
+        return list[bisect.bisect_left([moment for moment in list if marketOpen(moment)], time) + 1]
 
 
 def marketOpen(time):
