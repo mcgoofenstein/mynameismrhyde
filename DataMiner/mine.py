@@ -6,6 +6,7 @@ import json
 import datetime
 from datetime import timedelta
 import requests
+from dateutil.parser import parse
 
 """
 INPUT: prices_* files, /articles/SYM/* article text files, symbols.csv
@@ -22,17 +23,10 @@ class Article:
         with open(filepath, "r") as inputFile:
             self.contents = inputFile.readlines()
             self.text = self.getText(self.contents)
-            self.pubTime = self.getTime(self.contents[0])
+            self.pubTime = getTime(self.contents[0])
         self.price = self.getPrice(self.priceLines, self.pubTime)
         self.laterPrice = self.getPrice(self.priceLines, self.pubTime + timedelta(minutes=20))
-        self.sentiment = self.getSentiment(self.text)
-
-    def getTime(self, timeString):
-        try:
-            time = datetime.datetime.strptime(timeString.lstrip("Published Time: ").strip().replace("UTC-04:00 ", "").replace("-",""), "%a %d %b %H:%M:%S %Y")
-        except:
-            time = datetime.datetime.min
-        return time
+        self.sentiment = self.getSentiment(self.text, filepath)
 
     def getPrice(self, priceLines, time):
         price = [(json.loads(line))["LastPrice"] for line in priceLines if sameTime(json.loads(line)["Timestamp"], time)]
@@ -43,18 +37,25 @@ class Article:
         if len(price) > 1:
             return str(sum(price)/float(len(price)))
 
-    def getSentiment(self, text):
+    def getSentiment(self, text, filepath): #returns sentiment, and also writes sentiment info to original file
         try:
             text = text.replace("#", "").replace("%","")
             data = {"text":text ,"apikey":"0dac1111-f576-4f78-8a17-b7fbe3725959"}
             url = "https://api.idolondemand.com/1/api/sync/analyzesentiment/v1"
-            request = requests.post(url, data=data).content
-            return json.loads(request)["aggregate"]
+            if len(text) > 10 and not "var" in text.lstrip("\n")[:6] and not "=" in text.lstrip("\n")[:10] and not "()" in text.lstrip("\n")[:10]:
+                request = requests.post(url, data=data).content
+                json_ = json.loads(request)
+            with open(filepath, 'a') as articleFile:
+                articleFile.write("\nsentiment:\n")
+                json.dump(request, articleFile)
+            return json_["aggregate"]
         except:
             return {"sentiment":"error", "score":0}
 
 
     def getText(self, contents):
+        if "\nsentiment:\n" in contents[2]:
+            contents[2] = contents[2][:contents[2].index("\nsentiment:")]
         if "Close the Sharing and Personal Tools window Close" in contents[2] and "Smartlinks" in contents[2]: #markers for Noodls article format
             return contents[2][contents[2].index("Close the Sharing and Personal Tools window Close")+48:contents[2].index("Smartlinks")]
         else:
@@ -65,8 +66,15 @@ class Article:
         return "\t".join([self.symbol, self.title, str(self.pubTime), str(self.sentiment["score"]), self.sentiment["sentiment"], str(self.price), str(self.laterPrice)])
 
 
+def getTime(timeString):
+        try:
+            timeString = timeString.lstrip("Published Time: ").strip().replace("UTC-04:00 ", "").replace("-","")
+            return parse(timeString)
+        except:
+            return datetime.datetime.min
+
 def sameTime(timeStamp, time): #compares two timestamps for approximate equality
-    timeStamp = datetime.datetime.strptime(timeStamp.replace("UTC-04:00 ", ""), "%a %b %d %H:%M:%S %Y")
+    timeStamp = getTime(timeStamp)
     if (timeStamp - time).seconds < 120:
         return True
     else:
