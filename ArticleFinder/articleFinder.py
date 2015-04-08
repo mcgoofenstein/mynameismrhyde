@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import sys
 import json
 import datetime
+from datetime import timedelta
 import time
 
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0', 'From': 'mdgough@indiana.edu'}
@@ -55,10 +56,11 @@ def waitSeconds(timeNow, openClose):
         logFile.write("waiting 60 seconds before checking servers again...\n")
         return 60
     else:
-        timeToWait = 9 + (24 - timeNow.hour) * 3600
-        print "I'll check again in like " + str(timeToWait/3600) + " hours..."
-        logFile.write("I'll check again in like " + str(timeToWait/3600) + " hours...\n")
-        return timeToWait
+        nextOpen = datetime.datetime.combine(timeNow.today() + datetime.timedelta(days=1), datetime.time(9,30,0))
+        timeToWait = timeNow - nextOpen
+        print "I'll check again in like " + str(timeToWait.seconds/3600) + " hours..."
+        logFile.write("I'll check again in like " + str(timeToWait.seconds/3600) + " hours...\n")
+        return timeToWait.seconds
 
 def marketOpen(FIRST_TIME): #returns true if the market is open and it has been more than a minute since the last time the script ran
     """this is the regulator/driver function"""

@@ -137,11 +137,12 @@ OUTPUT_PATH = BASE_DIR + "data.csv"
 articlesDict = getArticles(ARTICLES_DIR)
 pricesDict = getPrices(PRICES_DIR)
 
-with open(OUTPUT_PATH, "w") as outputFile:
-    for symbol in articlesDict.keys():
-        for path in articlesDict[symbol][0]:
-            i = articlesDict[symbol][0].index(path)
-            outputFile.write(Article(symbol, path, articlesDict[symbol][1][i], pricesDict[symbol][0], pricesDict[symbol][1]).writeCSV() + "\n")
+if __name__ == "__main__":
+    with open(OUTPUT_PATH, "w") as outputFile:
+        for symbol in articlesDict.keys():
+            for path in articlesDict[symbol][0]:
+                i = articlesDict[symbol][0].index(path)
+                outputFile.write(Article(symbol, path, articlesDict[symbol][1][i], pricesDict[symbol][0], pricesDict[symbol][1]).writeCSV() + "\n")
 
 
 
