@@ -7,13 +7,12 @@ then
 echo "$(date) - stock program is running - " >> main.log
 else
 MR_HYDE=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-python $MR_HYDE/ArticleFinder/articleFinder.py debug &
+python $MR_HYDE/ArticleFinder/articleFinder.py &
 echo "article finder executed at $(date)" >> main.log
 sleep 60 &
 python $MR_HYDE/articleFetcher/wget.py $MR_HYDE/articles/ $MR_HYDE/ArticleFinder/newsList.txt &
 echo "article fetch executed at $(date)" >> main.log
 fi
-sleep 1200 &
-python $MR_HYDE/DataMiner/mine.py &
-echo "$(date) - analyzing available data..." >> main.log
+sleep 1200
 done
+
