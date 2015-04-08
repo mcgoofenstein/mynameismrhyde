@@ -73,15 +73,15 @@ class Article:
 
 
 def adjustToMarketOpen(time, list, when): #changes a time to the the closest past time in the list when the market was open
-    if time > max(list): #if the time is beyond the list of times to check, return latest open time
+    if time >= max(list): #if the time is beyond the list of times to check, return latest open time
         return max([moment for moment in list if marketOpen(moment)])
-    if time < min(list):
+    if time <= min(list):
         return min([moment for moment in list if marketOpen(moment)])
     # time must fit into the list somewhere in this case:
     if when == "before":
-        return list[bisect.bisect_left([moment for moment in list if marketOpen(moment)], time)]
+        return list[bisect.bisect_left([moment for moment in list if marketOpen(moment)], time) - 1]
     if when == "after":
-        return list[bisect.bisect_left([moment for moment in list if marketOpen(moment)], time) + 1]
+        return list[bisect.bisect_left([moment for moment in list if marketOpen(moment)], time)]
 
 
 def marketOpen(time):
