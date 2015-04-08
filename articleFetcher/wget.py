@@ -24,7 +24,9 @@ ALL_SYMBOLS = []
 ARTICLE_BASE_DIRECTORY = sys.argv[1]
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0', 'From': 'mdgough12@gmail.com'}
 inputFilePath = sys.argv[2]
-logPath = ARTICLE_BASE_DIRECTORY + "/fetcher.log"
+logPath = ARTICLE_BASE_DIRECTORY + "fetcher.log"
+TEXT_EXTRACTION_API = "https://api.idolondemand.com/1/api/sync/extracttext/v1?url="
+API_KEY = "&extract_metadata=false&additional_metadata=&reference_prefix=&password=&apikey=0dac1111-f576-4f78-8a17-b7fbe3725959"
 
 
 def newArticlesFound(): #check to see if the newslist has things to download
@@ -50,20 +52,40 @@ def getTime():
     day = datetime.datetime.now().weekday()
     return timeNow.strftime("%a %d %b %H:%M:%S %Y ") + "UTC-4:00 2015" #Tue Mar 17 15:59:00 UTC-04:00 2015
 
+def extractText(url, original):
+
+    try:
+        text = json.loads(requests.get(TEXT_EXTRACTION_API + url + API_KEY, headers=HEADERS).content)["document"][0]["content"]
+        text = text[text.index(article["title"]):] #optimize: eliminate up to the title to get rid of bs before article starts
+        #specific optimizations
+        if "noodls" in url:
+            pass # TODO: optimize text extraction from noodls pages
+        elif " (ANI)" in text:
+            text = text[:text.rindex(" (ANI)")]
+        elif "View All Comments" in text:
+            text = text[:text.rindex("View All Comments")]
+        text = text.replace("\\", "")
+        return text
+    except:
+        return original #just give up and return the raw page text
+
+
 def fetch(article):
     pages = []
     url = article["url"]
     try:
         print "fetching url: " + url
         logFile.write("fetching url: " + url)
-        soup = BeautifulSoup(requests.get(url, headers=HEADERS).content, "lxml")
-        if "View All" in soup.text and url[-9:] != "&page=all":
+        soup = BeautifulSoup(requests.get(url, headers=HEADERS).content, "lxml").text #get the raw webpage text
+        if "View All" in soup and url[-9:] != "&page=all": #if need be, go back and get the full page
             article["url"] += "&page=all"
             fetch(article)
+        soup = extractText(url, soup) #now try to refine and filter text using black magic
     except:
-        print "error fetching url: " + url + " - skipping..."
-        logFile.write("error fetching url: " + url + " - skipping...\n")
-    return article, soup
+        print "error extracting text at url: " + url + " - skipping..."
+        soup = ""
+        logFile.write("error extracting text at url: " + url + " - skipping...\n")
+    return article, soup #json, string
 
 
 def saveArticle(articleSoup): #takes a single json object and saves the webpage from its url to disk
@@ -72,7 +94,7 @@ def saveArticle(articleSoup): #takes a single json object and saves the webpage 
     path = str(os.path.join(ARTICLE_BASE_DIRECTORY + "/" + articleObject["symbol"] + "/").replace("//","/"))
     if not os.path.exists(path):
         os.makedirs(path)
-    outputFile = open(path + articleObject["title"].replace(" ", "_").replace("/", "-") +".html", 'w')
+    outputFile = open(path + articleObject["title"].replace(" ", "_").replace("/", "-") +".txt", 'w')
     timeString = "Published Time: " + articleObject["time"] + "\n" + "Fetched Time: " + getTime() + "\n"
     outputFile.write(timeString)
     outputFile.write(soup.encode('utf8'))
@@ -112,7 +134,7 @@ def removeFromNewsList(article): #takes a JSON article object and removes that e
 
 
 while(True):
-    logFile = open(logPath, "a")
+    logFile = open(logPath, "a+")
     if newArticlesFound(): # check the newsList for any articles
         try:
             print "Running Article Downloader at " + getTime() + " on input directory " + inputFilePath + " and output path " + ARTICLE_BASE_DIRECTORY
@@ -132,7 +154,7 @@ while(True):
             logFile.write("Article Fetcher at " + getTime() + ": IOError! There's nothing here...")
     else:
         print getTime() + ": no new articles found to download"
-        logFile.write(getTime() + ": no new articles found to download")
+        #logFile.write(getTime() + ": no new articles found to download")
     logFile.close()
     time.sleep(60)
 

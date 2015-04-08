@@ -1,6 +1,5 @@
-# mynameismyhyde
+# mynameismrhyde
 
-The name has a typo, but it's too late to change that now.
 
 INSTALLATION:
 
