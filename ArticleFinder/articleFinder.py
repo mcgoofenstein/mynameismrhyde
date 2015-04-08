@@ -68,7 +68,7 @@ def marketOpen(FIRST_TIME): #returns true if the market is open and it has been 
         return True
     timeNow = datetime.datetime.now()
     day = datetime.datetime.now().weekday()
-    if day < 5 and (timeNow.hour < 15 or (timeNow.hour == 16 and timeNow.minute <= 30)):
+    if day < 5 and (timeNow.hour <= 15 or (timeNow.hour == 16 and timeNow.minute <= 30)):
         openClose = "open!"
         rv = True
     else:
