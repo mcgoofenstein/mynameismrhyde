@@ -39,7 +39,7 @@ def getTime():
 
 def convertToEST(time):
     #Fri, 20 Feb 2015 19:26:45 GMT -> Fri Feb 20 14:26:45 UTC-04:00 2015
-    hour = str(int(time.split(":")[0].split(" ")[-1]) - 5).zfill(2)
+    hour = str(int(time.split(":")[0].split(" ")[-1]) - 4).zfill(2)
     month = time.split(" ")[2]
     day = time.split(" ")[1]
     weekday = time.split(" ")[0][:-1]
